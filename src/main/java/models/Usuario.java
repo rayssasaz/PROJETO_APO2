@@ -1,7 +1,7 @@
 package models;
 
 public class Usuario {
-	private int idusuario;
+	private int idUsuario;
 	private String nome;
 	private String email;
 	private String senha;
@@ -15,7 +15,7 @@ public class Usuario {
 	
 
 	public Usuario(int idusuario, String nome, String email, String senha, NivelAcesso acesso) {
-		this.idusuario = idusuario;
+		this.idUsuario = idusuario;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
@@ -24,12 +24,12 @@ public class Usuario {
 
 
 
-	public int getIdusuario() {
-		return idusuario;
+	public int getIdUsuario() {
+		return idUsuario;
 	}
 
-	public void setIdusuario(int idusuario) {
-		this.idusuario = idusuario;
+	public void setIdUsuario(int idusuario) {
+		this.idUsuario = idusuario;
 	}
 
 	public String getNome() {
