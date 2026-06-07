@@ -62,11 +62,8 @@ public class UsuarioDAO {
         Usuario usuario = null;
 
         try {
-            // 1. Obtém a conexão com o banco de dados
-        //    conn = ConnectionFactory.getConnection(); 
-        	
-
-            // 2. Prepara a query SQL (Segura contra SQL Injection)
+          
+            // prepara a query SQL (Segura contra SQL Injection)
             String sql = "SELECT id_usuario, nome_usuario, email, papel FROM tb_usuario WHERE email = ? AND senha = ?";
             stmt = conn.prepareStatement(sql);
             // Nota: A senha ja está hasheada (o AuthServlet passa a senha hasheada como parâmetro na chamada do método)
@@ -98,8 +95,27 @@ public class UsuarioDAO {
            // try { if (conn != null) conn.close(); } catch (Exception e) {}
         }
 
-        return usuario; // Retorna o usuário preenchido ou null se falhar
+        return usuario; // retorna o usuário preenchido ou null se falhar
     }
+    
+    
+    public boolean atualizarSenha(String email, String novaSenhaHasheada) {
+        String sql = "UPDATE tb_usuario SET senha = ? WHERE email = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, novaSenhaHasheada);
+            stmt.setString(2, email);
+            
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0; // retorna true se conseguiu atualizar
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    
     
     // OUTROS MÉTODOS
     

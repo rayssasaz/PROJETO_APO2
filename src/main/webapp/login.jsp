@@ -31,6 +31,18 @@
                     <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
                 </div>
             <% } %>
+            
+            <% if (request.getAttribute("sucesso") != null) { %>
+			    <div style="color: green; background-color: #e6ffed; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+			        <%= request.getAttribute("sucesso") %>
+			    </div>
+			<% } %>
+			
+			<% if (request.getAttribute("erro") != null) { %>
+			    <div style="color: red; background-color: #ffeef0; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+			        <%= request.getAttribute("erro") %>
+			    </div>
+			<% } %>
 
             <form action="${pageContext.request.contextPath}/auth" method="POST">
                 <input type="hidden" name="action" value="login">
