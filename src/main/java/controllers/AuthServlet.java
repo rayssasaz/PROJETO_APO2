@@ -48,6 +48,33 @@ public class AuthServlet extends HttpServlet {
 			}
 			// Manda de volta para a landing page deslogado
 			response.sendRedirect(request.getContextPath() + "/index.jsp");
+		} else if ("verificarEmail".equals(action)) {
+		    String email = request.getParameter("email");
+		    
+		    DBConnection db = new DBConnection();
+		    try (Connection conn = db.getConnection()) {
+		        UsuarioDAO usuarioDAO = new UsuarioDAO(conn);
+		        Usuario usuario = usuarioDAO.buscarPorEmail(email);
+		        
+		        // Configura o cabeçalho HTTP para responder JSON puro
+		        response.setContentType("application/json");
+		        response.setCharacterEncoding("UTF-8");
+		        
+		        // Se encontrar o usuário, significa que o e-mail JÁ EXISTE (não está disponível)
+		        boolean disponivel = (usuario == null);
+		        
+		        // Constrói o formato JSON manualmente: {"disponivel": true} ou {"disponivel": false}
+		        String json = "{\"disponivel\": " + disponivel + "}";
+		        
+		        response.getWriter().write(json);
+		        return; // Interrompe o método para não executar nenhum forward ou redirect!
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		        response.getWriter().write("{\"erro\": \"Erro no servidor ao validar e-mail.\"}");
+		        return;
+		    }
 		} else if("validar".equals(action)){
 			String tokenRecebido = request.getParameter("token");
 	        
@@ -67,10 +94,10 @@ public class AuthServlet extends HttpServlet {
 	            request.setAttribute("erro", "Link de validação inválido ou expirado.");
 	        }
 	        request.getRequestDispatcher("login.jsp").forward(request, response);		
-		}		
+		} 		
 		else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
-		}
+		} 
 	}
 
 	/**

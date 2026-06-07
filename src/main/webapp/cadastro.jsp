@@ -71,7 +71,7 @@
                     <i class="fa-solid fa-circle-xmark me-1"></i> As senhas informadas não coincidem.
                 </div>
 
-                <button type="submit" class="btn btn-success w-100 fw-bold mt-2 py-2">
+                <button type="submit" id="btnSubmit" class="btn btn-success w-100 fw-bold mt-2 py-2">
                     <i class="fa-solid fa-check me-2"></i>Finalizar Cadastro
                 </button>
             </form>
@@ -88,7 +88,7 @@
     <%@ include file="components/scripts.jsp" %>
 
     <script>
-        $(document).ready(function() {
+       /* $(document).ready(function() {
             $('#formCadastro').on('submit', function(e) {
                 var senha = $('#senha').val();
                 var confirma = $('#confirmarSenha').val();
@@ -102,7 +102,59 @@
                     $('#confirmarSenha').removeClass('is-invalid');
                 }
             });
+        }); */
+        
+        $(document).ready(function() {
+            
+            // 1. AJAX de validação de e-mail em tempo real
+            $("#email").on("blur", function() {
+                var emailDigitado = $(this).val();
+                
+                // Ignora a validação se o campo estiver limpo
+                if(emailDigitado.trim() === "") return;
+                
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/auth",
+                    type: "GET",
+                    data: { 
+                        action: "verificarEmail", 
+                        email: emailDigitado 
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.disponivel) {
+                            // E-mail livre: adiciona borda verde do Bootstrap
+                            $("#email").removeClass("is-invalid").addClass("is-valid");
+                            $("#btnSubmit").prop("disabled", false); // Ativa o botão de envio
+                        } else {
+                            // E-mail já cadastrado: adiciona borda vermelha
+                            $("#email").removeClass("is-valid").addClass("is-invalid");
+                            alert("Atenção: Este e-mail já está associado a uma conta ativa.");
+                            $("#btnSubmit").prop("disabled", true); // Bloqueia o envio do form
+                        }
+                    },
+                    error: function() {
+                        console.error("Falha ao conectar com o endpoint de validação.");
+                    }
+                });
+            });
+
+            // 2. Validação client-side das senhas (Mantida do nosso escopo anterior)
+            $('#formCadastro').on('submit', function(e) {
+                var senha = $('#senha').val();
+                var confirma = $('#confirmarSenha').val();
+                
+                if (senha !== confirma) {
+                    e.preventDefault(); 
+                    $('#senhaFeedback').removeClass('d-none');
+                    $('#confirmarSenha').addClass('is-invalid');
+                } else {
+                    $('#senhaFeedback').addClass('d-none');
+                    $('#confirmarSenha').removeClass('is-invalid');
+                }
+            });
         });
     </script>
+    
 </body>
 </html>

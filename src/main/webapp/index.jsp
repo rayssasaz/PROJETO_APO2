@@ -19,6 +19,7 @@
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <%@ include file="components/navbar.jsp" %>
+   
 
     <main style="padding-top: 56px;">
         

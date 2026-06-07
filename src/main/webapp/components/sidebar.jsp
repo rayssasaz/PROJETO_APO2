@@ -3,16 +3,17 @@
 <%@ page import="models.NivelAcesso" %>
 <%
     Usuario userSidebar = (Usuario) session.getAttribute("usuarioAutenticado");
+    String uriAtual = request.getRequestURI();
     
-    String papel = "";
-    if (userSidebar != null && userSidebar.getAcesso() != null) {
-        papel = userSidebar.getAcesso().name(); // Pega o nome do Enum (CLIENTE, SUPORTE, ADMIN)
+    // 1. CORREÇÃO: Se não tiver logado OU se estiver na index.jsp, a sidebar não renderiza nada!
+    if (userSidebar == null || uriAtual.endsWith("index.jsp") || uriAtual.endsWith("/")) {
+        return; 
     }
     
-    // CASO QUEIRA TESTAR O VISUAL SEM ESTAR LOGADO, DESCOMENTE UMA DAS LINHAS ABAIXO:
-    // papel = "CLIENTE";
-    // papel = "SUPORTE";
-    // papel = "ADMIN";
+    String papel = "";
+    if (userSidebar.getAcesso() != null) {
+        papel = userSidebar.getAcesso().name(); 
+    }
 %>
 
 <div class="bg-dark text-white p-3 flex-shrink-0 d-flex flex-column shadow" style="width: 240px; min-height: calc(100vh - 56px);">
@@ -21,12 +22,14 @@
         
         <% if ("CLIENTE".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/cliente/dashboard.jsp" class="nav-link text-white active">
+                <a href="${pageContext.request.contextPath}/cliente/dashboard.jsp" 
+                   class="nav-link text-white <%= uriAtual.contains("dashboard.jsp") ? "active bg-primary" : "" %>">
                     <i class="fa-solid fa-chart-pie me-2"></i>Meu Painel
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/cliente/abrir-chamado.jsp" class="nav-link text-white">
+                <a href="${pageContext.request.contextPath}/cliente/abrir-chamado.jsp" 
+                   class="nav-link text-white <%= uriAtual.contains("abrir-chamado.jsp") ? "active bg-primary" : "" %>">
                     <i class="fa-solid fa-plus-circle me-2"></i>Abrir Chamado
                 </a>
             </li>
@@ -34,7 +37,8 @@
 
         <% if ("SUPORTE".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/suporte/fila-chamados.jsp" class="nav-link text-dark bg-warning fw-bold">
+                <a href="${pageContext.request.contextPath}/suporte/fila-chamados.jsp" 
+                   class="nav-link text-dark <%= uriAtual.contains("fila-chamados.jsp") ? "active bg-warning" : "bg-warning text-dark fw-bold" %>">
                     <i class="fa-solid fa-list-check me-2"></i>Fila de Chamados
                 </a>
             </li>
@@ -42,17 +46,20 @@
 
         <% if ("ADMIN".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/admin/dashboard-global.jsp" class="nav-link text-white active bg-danger">
+                <a href="${pageContext.request.contextPath}/admin/dashboard-global.jsp" 
+                   class="nav-link text-white <%= uriAtual.contains("dashboard-global.jsp") ? "active bg-danger" : "" %>">
                     <i class="fa-solid fa-gauge me-2"></i>Painel Geral
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/admin/gerenciar-usuarios.jsp" class="nav-link text-white">
+                <a href="${pageContext.request.contextPath}/admin/gerenciar-usuarios.jsp" 
+                   class="nav-link text-white <%= uriAtual.contains("gerenciar-usuarios.jsp") ? "active bg-danger" : "" %>">
                     <i class="fa-solid fa-users me-2"></i>Controle de Usuários
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/admin/configuracoes.jsp" class="nav-link text-white">
+                <a href="${pageContext.request.contextPath}/admin/categorias" 
+                   class="nav-link text-white <%= uriAtual.contains("categorias") || uriAtual.contains("configuracoes") ? "active bg-danger" : "" %>">
                     <i class="fa-solid fa-sliders me-2"></i>Categorias e Sistema
                 </a>
             </li>

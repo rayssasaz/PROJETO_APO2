@@ -59,7 +59,7 @@ public class UsuarioDAO {
      //   Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Usuario usuario = null;
+        Usuario usuario = null;	
 
         try {
           
@@ -115,7 +115,32 @@ public class UsuarioDAO {
         }
     }
     
-    
+    public Usuario buscarPorEmail(String email) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Usuario usuario = null;
+        String sql = "SELECT id_usuario, nome_usuario, email, papel FROM tb_usuario WHERE email = ?";
+        
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNome(rs.getString("nome_usuario"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setAcesso(NivelAcesso.valueOf(rs.getString("papel")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+        }
+        return usuario;
+    }
     
     // OUTROS MÉTODOS
     
