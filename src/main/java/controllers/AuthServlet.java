@@ -114,7 +114,7 @@ public class AuthServlet extends HttpServlet {
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	    
 	    try {
-	        // Use a lógica de conexão que vocês criaram e que está funcionando
+	        //cria a conexão
 	        conn = db.getConnection(); 
 	        
 	        // 2. Instancia o DAO injetando a conexão ativa
@@ -124,7 +124,7 @@ public class AuthServlet extends HttpServlet {
 	            String email = request.getParameter("email");
 	            String senhaDigitada = request.getParameter("senha");
 	            
-	            // Se já ativou a criptografia, lembre-se de converter a senhaDigitada para SHA-256 aqui
+
 	            String senhaHasheada = Criptografia.converterParaSHA256(senhaDigitada);
 	            
 	            Usuario usuario = usuarioDAO.autenticar(email, senhaHasheada);
@@ -209,7 +209,7 @@ public class AuthServlet extends HttpServlet {
                     // 2. Token válido! Criptografa a nova senha
                     String senhaHasheada = Criptografia.converterParaSHA256(novaSenhaDigitada);
                     
-                    // 3. Atualiza a senha no banco de dados
+                    
                     boolean sucesso = usuarioDAO.atualizarSenha(email, senhaHasheada);
                     
                     if (sucesso) {

@@ -5,10 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mysql.jdbc.Connection;
 
 import models.CategoriaChamado;
-
+import java.sql.Connection;
 
 public class CategoriaDAO {
 	private Connection conn;
@@ -43,7 +42,8 @@ public class CategoriaDAO {
 		PreparedStatement stmt = null;
         ResultSet rs = null;
         java.util.ArrayList<CategoriaChamado> lista = new java.util.ArrayList<>();
-        String sql = "SELECT id_categoria, nome_categoria, descricao FROM tb_categoria";
+       // String sql = "SELECT id_categoria, nome_categoria, descricao FROM tb_categoria";
+        String sql = "SELECT id_categoria, nome_categoria, descricao FROM tb_categoria ORDER BY nome_categoria ASC";
         
         try {
         	stmt = conn.prepareStatement(sql);
@@ -65,5 +65,27 @@ public class CategoriaDAO {
         }
         return lista;
 	}
+	
+	/**
+     * Remove uma categoria pelo ID
+     */
+    public boolean deletarCategoria(int id) {
+        PreparedStatement stmt = null;
+        String sql = "DELETE FROM tb_categoria WHERE id_categoria = ?";
+
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Retorna false se violar chaves estrangeiras (categoria em uso por chamados)
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (SQLException e) {}
+        }
+    }
 	
 }

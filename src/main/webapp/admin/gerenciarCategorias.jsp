@@ -69,7 +69,11 @@
                                             <input type="text" id="nomeCategoria" name="nome" class="form-control" placeholder="Ex: Redes, Hardware..." required>
                                             <div class="form-text small">Evite nomes muito longos ou duplicados.</div>
                                         </div>
-                                        
+                                         <div class="mb-3">
+                                            <label for="descricao" class="form-label small fw-bold">Descrição</label>
+                                            <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Ex: Teclado, monitor..." required>
+                                            <div class="form-text small">Descreva brevemente com exemplos.</div>
+                                        </div>
                                         <button type="submit" class="btn btn-danger w-100 fw-bold">
                                             <i class="fa-solid fa-plus me-2"></i>Adicionar Categoria
                                         </button>
@@ -92,8 +96,9 @@
                                             <thead class="table-light">
                                                 <tr>
                                                     <th class="px-4" style="width: 15%">ID</th>
-                                                    <th style="width: 65%">Nome da Categoria</th>
-                                                    <th class="text-center" style="width: 20%">Ações</th>
+                                                    <th style="width: 25%">Nome da Categoria</th>
+                                                    <th style="width: 60%">Descrição</th>
+                                                    <th class="text-center" style="width: 15%">Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -101,17 +106,18 @@
                                                     if (categorias != null && !categorias.isEmpty()) { 
                                                         for (CategoriaChamado cat : categorias) {
                                                 %>
-                                                    <tr>
+                                                    <tr id="linha-categoria-<%= cat.getIdCategoria() %>">
                                                         <td class="px-4 text-muted fw-bold">#<%= cat.getIdCategoria() %></td>
                                                         <td class="fw-semibold text-dark"><%= cat.getNome() %></td>
+                                                        <td class="fw-semibold text-dark"><%= cat.getDescricao() %></td>
                                                         <td class="text-center">
-                                                            <form action="${pageContext.request.contextPath}/admin/categories" method="POST" class="d-inline form-deletar">
-                                                                <input type="hidden" name="action" value="deletar">
-                                                                <input type="hidden" name="id" value="<%= cat.getIdCategoria() %>">
-                                                                <button type="submit" class="btn btn-outline-danger btn-sm border-0" title="Excluir Categoria">
-                                                                    <i class="fa-solid fa-trash-can"></i>
-                                                                </button>
-                                                            </form>
+                                                            <form action="${pageContext.request.contextPath}/admin/categorias" method="POST" class="d-inline form-deletar">
+															    <input type="hidden" name="action" value="deletar">
+															    <input type="hidden" name="id" value="<%= cat.getIdCategoria() %>">
+															    <button type="submit" class="btn btn-outline-danger btn-sm border-0" title="Excluir Categoria">
+															        <i class="fa-solid fa-trash-can"></i>
+															    </button>
+															</form>
                                                         </td>
                                                     </tr>
                                                 <% 
@@ -141,14 +147,47 @@
 
     <%@ include file="../components/scripts.jsp" %>
 
-    <script>
-        $(document).ready(function() {
-            $('.form-deletar').on('submit', function(e) {
-                if (!confirm("Tem certeza que deseja excluir esta categoria? Chamados associados a ela podem ser afetados.")) {
-                    e.preventDefault(); // Cancela o envio se o admin clicar em "Cancelar"
-                }
-            });
+<script>
+    $(document).ready(function() {
+        
+        // Intercepta o envio do formulário de deletar
+        $('.form-deletar').on('submit', function(e) {
+            e.preventDefault(); // Impede o formulário de recarregar a página tradicionalmente
+            
+            var $form = $(this);
+            var idCategoria = $form.find('input[name="id"]').val();
+            var urlAcao = $form.attr('action');
+            
+            if (confirm("Tem certeza que deseja excluir esta categoria?")) {
+                
+                // Dispara a requisição AJAX
+                $.ajax({
+                    url: urlAcao,
+                    type: "POST",
+                    data: {
+                        action: "deletar",
+                        id: idCategoria
+                    },
+                    dataType: "json",
+                    success: function(resposta) {
+                        // Se o banco deletou com sucesso, some com a linha da tabela de forma suave
+                        $('#linha-categoria-' + idCategoria).fadeOut(400, function() {
+                            $(this).remove(); // Remove o elemento do HTML após o efeito
+                        });
+                        
+                        // Opcional: Atualiza o contador de categorias ativas no topo da tabela
+                        var contadorAtual = parseInt($('.badge.bg-secondary').text());
+                        $('.badge.bg-secondary').text((contadorAtual - 1) + " Ativas");
+                    },
+                    error: function(xhr) {
+                        // Se falhar (ex: restrição de chave estrangeira), exibe o erro em um alert
+                        var erroJson = xhr.responseJSON;
+                        alert(erroJson && erroJson.mensagem ? erroJson.mensagem : "Erro ao excluir a categoria.");
+                    }
+                });
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
