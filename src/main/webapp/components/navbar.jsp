@@ -25,7 +25,7 @@
                             <%= usuarioLogado.getNome() %>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow">
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-id-card me-2 text-muted"></i>Meu Perfil</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/perfil"><i class="fa-solid fa-id-card me-2 text-muted"></i>Meu Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/auth?action=logout"><i class="fa-solid fa-right-from-bracket me-2"></i>Sair</a></li>
                         </ul>

@@ -79,9 +79,9 @@
                                     <i class="fa-solid fa-users-gear fa-3x text-primary mb-3"></i>
                                     <h5 class="fw-bold">Controle de Usuários</h5>
                                     <p class="text-muted small mb-4">Promova clientes a técnicos de suporte ou rebaixe administradores.</p>
-                                    <a href="${pageContext.request.contextPath}/admin/gerenciar-usuarios.jsp" class="btn btn-outline-primary w-100">
-                                        Gerenciar Acessos
-                                    </a>
+                                    <a href="${pageContext.request.contextPath}/admin/usuarios" class="btn btn-outline-primary w-100">
+									    Gerenciar Acessos
+									</a>
                                 </div>
                             </div>
                         </div>

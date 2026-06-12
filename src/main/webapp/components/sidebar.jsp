@@ -22,17 +22,23 @@
         
         <% if ("CLIENTE".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/cliente/dashboard.jsp" 
+                <a href="${pageContext.request.contextPath}/cliente/dashboard" 
                    class="nav-link text-white <%= uriAtual.contains("dashboard.jsp") ? "active bg-primary" : "" %>">
                     <i class="fa-solid fa-chart-pie me-2"></i>Meu Painel
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/cliente/abrir-chamado.jsp" 
-                   class="nav-link text-white <%= uriAtual.contains("abrir-chamado.jsp") ? "active bg-primary" : "" %>">
+                <a href="${pageContext.request.contextPath}/cliente/abrir-chamado" 
+                   class="nav-link text-white <%= uriAtual.contains("abrirChamado.jsp") ? "active bg-primary" : "" %>">
                     <i class="fa-solid fa-plus-circle me-2"></i>Abrir Chamado
                 </a>
             </li>
+            <li class="nav-item mb-2">
+			    <a href="${pageContext.request.contextPath}/perfil" 
+			       class="nav-link text-white <%= uriAtual.contains("perfil") ? "active bg-primary" : "" %>">
+			        <i class="fa-regular fa-id-badge me-2"></i>Meu Perfil
+			    </a>
+			</li>
         <% } %>
 
         <% if ("SUPORTE".equals(papel)) { %>
@@ -42,6 +48,12 @@
                     <i class="fa-solid fa-list-check me-2"></i>Fila de Chamados
                 </a>
             </li>
+            <li class="nav-item mb-2">
+			    <a href="${pageContext.request.contextPath}/perfil" 
+			       class="nav-link text-white <%= uriAtual.contains("perfil") ? "active bg-primary" : "" %>">
+			        <i class="fa-regular fa-id-badge me-2"></i>Meu Perfil
+			    </a>
+			</li>
         <% } %>
 
         <% if ("ADMIN".equals(papel)) { %>
@@ -52,17 +64,23 @@
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/admin/gerenciar-usuarios.jsp" 
-                   class="nav-link text-white <%= uriAtual.contains("gerenciar-usuarios.jsp") ? "active bg-danger" : "" %>">
-                    <i class="fa-solid fa-users me-2"></i>Controle de Usuários
-                </a>
-            </li>
+			    <a href="${pageContext.request.contextPath}/admin/usuarios" 
+			       class="nav-link text-white <%= uriAtual.contains("usuarios") ? "active bg-danger" : "" %>">
+			        <i class="fa-solid fa-users me-2"></i>Controle de Usuários
+			    </a>
+			</li>
             <li class="nav-item mb-2">
                 <a href="${pageContext.request.contextPath}/admin/categorias" 
                    class="nav-link text-white <%= uriAtual.contains("categorias") || uriAtual.contains("configuracoes") ? "active bg-danger" : "" %>">
                     <i class="fa-solid fa-sliders me-2"></i>Categorias e Sistema
                 </a>
             </li>
+            <li class="nav-item mb-2">
+			    <a href="${pageContext.request.contextPath}/perfil" 
+			       class="nav-link text-white <%= uriAtual.contains("perfil") ? "active bg-primary" : "" %>">
+			        <i class="fa-regular fa-id-badge me-2"></i>Meu Perfil
+			    </a>
+			</li>
         <% } %>
         
     </ul>

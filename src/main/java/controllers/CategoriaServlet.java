@@ -64,6 +64,8 @@ public class CategoriaServlet extends HttpServlet {
 	 * MÉTODO POST: Trata os envios dos formulários da gerenciarCategorias.jsp (Salvar e Deletar)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//  FORÇA O SERVLET A LER TUDO COM ACENTUAÇÃO CORRETA
+	    request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
         
         DBConnection db = new DBConnection();

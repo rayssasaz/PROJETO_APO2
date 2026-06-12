@@ -193,4 +193,104 @@ public class UsuarioDAO {
     
     
     
+    
+    
+ // Busca apenas os IDs das categorias que um técnico específico atende
+    public java.util.List<Integer> listarIdsCategoriasPorTecnico(int idTecnico) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        java.util.List<Integer> ids = new java.util.ArrayList<>();
+        String sql = "SELECT id_categoria FROM tb_tecnico_categoria WHERE id_usuario = ?";
+        
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idTecnico);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ids.add(rs.getInt("id_categoria"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+        }
+        return ids;
+    }
+
+    // Atualiza as especialidades do técnico (Deleta as antigas e insere as novas)
+    public boolean salvarCategoriasTecnico(int idTecnico, String[] idsCategorias) {
+        PreparedStatement stmtDelete = null;
+        PreparedStatement stmtInsert = null;
+        
+        String sqlDelete = "DELETE FROM tb_tecnico_categoria WHERE id_usuario = ?";
+        String sqlInsert = "INSERT INTO tb_tecnico_categoria (id_usuario, id_categoria) VALUES (?, ?)";
+        
+        try {
+            // Desativa o auto-commit para fazer as operações como uma transação segura
+            boolean autoCommitOriginal = conn.getAutoCommit();
+            conn.setAutoCommit(false);
+            
+            // 1. Limpa o que ele já tinha cadastrado
+            stmtDelete = conn.prepareStatement(sqlDelete);
+            stmtDelete.setInt(1, idTecnico);
+            stmtDelete.executeUpdate();
+            
+            // 2. Insere as novas marcações (se houver alguma selecionada)
+            if (idsCategorias != null && idsCategorias.length > 0) {
+                stmtInsert = conn.prepareStatement(sqlInsert);
+                for (String idCatStr : idsCategorias) {
+                    stmtInsert.setInt(1, idTecnico);
+                    stmtInsert.setInt(2, Integer.parseInt(idCatStr));
+                    stmtInsert.addBatch(); // Adiciona em lote para performance
+                }
+                stmtInsert.executeBatch();
+            }
+            
+            conn.commit(); // Grava tudo de vez no banco
+            conn.setAutoCommit(autoCommitOriginal);
+            return true;
+            
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { if (stmtDelete != null) stmtDelete.close(); } catch (Exception e) {}
+            try { if (stmtInsert != null) stmtInsert.close(); } catch (Exception e) {}
+        }
+    }
+    
+    
+ // Atualiza os dados básicos e, opcionalmente, a senha
+    public boolean atualizarPerfil(Usuario usuario, boolean alterarSenha) {
+        PreparedStatement stmt = null;
+        // Se for alterar a senha, o UPDATE inclui a coluna senha. Senão, ignora ela.
+        String sql = alterarSenha 
+            ? "UPDATE tb_usuario SET nome_usuario = ?, email = ?, senha = ? WHERE id_usuario = ?"
+            : "UPDATE tb_usuario SET nome_usuario = ?, email = ? WHERE id_usuario = ?";
+        
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            
+            if (alterarSenha) {
+                stmt.setString(3, usuario.getSenha()); // Senha já deve vir criptografada do Servlet
+                stmt.setInt(4, usuario.getIdUsuario());
+            } else {
+                stmt.setInt(3, usuario.getIdUsuario());
+            }
+            
+            return stmt.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Retorna false caso o e-mail escolhido já exista no banco (UNIQUE constraint)
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (SQLException e) {}
+        }
+    }
+    
+    
 }

@@ -130,8 +130,17 @@ public class AuthServlet extends HttpServlet {
 	            Usuario usuario = usuarioDAO.autenticar(email, senhaHasheada);
 	            
 	            if (usuario != null) {
+	            	// Sucesso: Salva na sessão
 	                request.getSession().setAttribute("usuarioAutenticado", usuario);
-	                response.sendRedirect(request.getContextPath() + "/index.jsp");
+	                
+	                // REDIRECIONAMENTO POR PAPEL:
+	                if (models.NivelAcesso.ADMIN.equals(usuario.getAcesso())) {
+	                    response.sendRedirect(request.getContextPath() + "/admin/dashboard-global.jsp");
+	                } else if (models.NivelAcesso.SUPORTE.equals(usuario.getAcesso())) {
+	                    response.sendRedirect(request.getContextPath() + "/suporte/fila-chamados.jsp");
+	                } else {
+	                    response.sendRedirect(request.getContextPath() + "/cliente/dashboard.jsp");
+	                }
 	            } else {
 	                request.setAttribute("erro", "E-mail ou senha incorretos.");
 	                request.getRequestDispatcher("login.jsp").forward(request, response);
