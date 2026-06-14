@@ -89,7 +89,11 @@ public class ChamadoServlet extends HttpServlet {
             if (sucesso) {
                 // Devolve a mensagem de sucesso para a requisição e manda o fluxo para o Dashboard
                 request.setAttribute("sucesso", "Seu chamado foi registrado e já está na fila de atendimento!");
-                request.getRequestDispatcher("/cliente/dashboard").forward(request, response);
+             
+                // request.getRequestDispatcher("/cliente/dashboard").forward(request, response);
+
+                //(Redirecionamento HTTP 302):
+                response.sendRedirect(request.getContextPath() + "/cliente/dashboard");
             } else {
                 request.setAttribute("erro", "Ocorreu um erro ao registrar o chamado. Tente novamente.");
                 doGet(request, response); // Recarrega a tela de formulário

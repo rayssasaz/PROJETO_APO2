@@ -8,6 +8,20 @@
         return;
     }
 %>
+
+<%
+    // Recupera os valores enviados pelo Servlet (com fallback para 0 caso algo falhe)
+    Integer totalChamados = (Integer) request.getAttribute("totalChamados");
+    Integer chamadosFila = (Integer) request.getAttribute("chamadosFila");
+    Integer chamadosResolvidos = (Integer) request.getAttribute("chamadosResolvidos");
+    Integer totalUsuarios = (Integer) request.getAttribute("totalUsuarios");
+    
+    // Tratamento anti-nulo de segurança
+    int txtTotal = (totalChamados != null) ? totalChamados : 0;
+    int txtFila = (chamadosFila != null) ? chamadosFila : 0;
+    int txtResolvidos = (chamadosResolvidos != null) ? chamadosResolvidos : 0;
+    int txtUsuarios = (totalUsuarios != null) ? totalUsuarios : 0;
+%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -38,33 +52,33 @@
                         <div class="col-md-3">
                             <div class="card shadow-sm border-0 bg-primary text-white h-100">
                                 <div class="card-body">
-                                    <h6 class="card-title text-uppercase text-white-50 fw-bold">Total de Chamados</h6>
-                                    <h2 class="display-5 fw-bold mb-0">0</h2>
-                                </div>
+								    <h6 class="card-title">TOTAL DE CHAMADOS</h6>
+								    <h2 class="display-5 fw-bold"><%= txtTotal %></h2>
+								</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm border-0 bg-warning text-dark h-100">
                                 <div class="card-body">
-                                    <h6 class="card-title text-uppercase text-dark-50 fw-bold">Em Aberto / Fila</h6>
-                                    <h2 class="display-5 fw-bold mb-0">0</h2>
-                                </div>
+								    <h6 class="card-title">EM ABERTO / FILA</h6>
+								    <h2 class="display-5 fw-bold"><%= txtFila %></h2>
+								</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm border-0 bg-success text-white h-100">
                                 <div class="card-body">
-                                    <h6 class="card-title text-uppercase text-white-50 fw-bold">Resolvidos</h6>
-                                    <h2 class="display-5 fw-bold mb-0">0</h2>
-                                </div>
+								    <h6 class="card-title">RESOLVIDOS</h6>
+								    <h2 class="display-5 fw-bold"><%= txtResolvidos %></h2>
+								</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="card shadow-sm border-0 bg-danger text-white h-100">
                                 <div class="card-body">
-                                    <h6 class="card-title text-uppercase text-white-50 fw-bold">Usuários Ativos</h6>
-                                    <h2 class="display-5 fw-bold mb-0">0</h2>
-                                </div>
+								    <h6 class="card-title">USUÁRIOS ATIVOS</h6>
+								    <h2 class="display-5 fw-bold"><%= txtUsuarios %></h2>
+								</div>
                             </div>
                         </div>
                     </div>

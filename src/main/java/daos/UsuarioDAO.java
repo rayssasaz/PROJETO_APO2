@@ -292,5 +292,29 @@ public class UsuarioDAO {
         }
     }
     
-    
+    /**
+     * Retorna o total de usuários cadastrados no sistema
+     */
+    public int contarTotalUsuarios() {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int total = 0;
+        
+        String sql = "SELECT COUNT(*) AS total FROM tb_usuario";
+        
+        try {
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+        }
+        return total;
+    }
 }

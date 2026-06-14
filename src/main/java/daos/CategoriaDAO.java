@@ -87,5 +87,42 @@ public class CategoriaDAO {
             try { if (stmt != null) stmt.close(); } catch (SQLException e) {}
         }
     }
+    
+    /**
+     * Retorna a lista de especialidades (categorias) associadas a um técnico
+     */
+    public java.util.List<CategoriaChamado> listarPorTecnico(int idTecnico) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        java.util.List<CategoriaChamado> lista = new java.util.ArrayList<>();
+        
+        // CORREÇÃO 1: Mudei descricao_categoria para descricao
+        String sql = "SELECT c.id_categoria, c.nome_categoria, c.descricao " +
+                     "FROM tb_categoria c " +
+                     "INNER JOIN tb_tecnico_categoria tc ON c.id_categoria = tc.id_categoria " +
+                     "WHERE tc.id_usuario = ?";
+        
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idTecnico);
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                CategoriaChamado cat = new CategoriaChamado();
+                cat.setIdCategoria(rs.getInt("id_categoria"));
+                cat.setNome(rs.getString("nome_categoria"));
+                
+                // CORREÇÃO 2: Mudei aqui também para ler a coluna correta
+                cat.setDescricao(rs.getString("descricao")); 
+                lista.add(cat);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // DICA: Se der erro, olhe a aba "Console" do Eclipse, o motivo em vermelho estará lá!
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+        }
+        return lista;
+    }
 	
 }

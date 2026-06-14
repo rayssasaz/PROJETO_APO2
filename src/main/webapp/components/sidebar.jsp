@@ -43,8 +43,8 @@
 
         <% if ("SUPORTE".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/suporte/fila-chamados.jsp" 
-                   class="nav-link text-dark <%= uriAtual.contains("fila-chamados.jsp") ? "active bg-warning" : "bg-warning text-dark fw-bold" %>">
+                <a href="${pageContext.request.contextPath}/suporte/dashboard" 
+                   class="nav-link text-dark <%= uriAtual.contains("dashboardSuporte.jsp") ? "active bg-warning" : "bg-warning text-dark fw-bold" %>">
                     <i class="fa-solid fa-list-check me-2"></i>Fila de Chamados
                 </a>
             </li>
@@ -58,7 +58,7 @@
 
         <% if ("ADMIN".equals(papel)) { %>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/admin/dashboard-global.jsp" 
+                <a href="${pageContext.request.contextPath}/admin/dashboard" 
                    class="nav-link text-white <%= uriAtual.contains("dashboard-global.jsp") ? "active bg-danger" : "" %>">
                     <i class="fa-solid fa-gauge me-2"></i>Painel Geral
                 </a>
@@ -79,6 +79,12 @@
 			    <a href="${pageContext.request.contextPath}/perfil" 
 			       class="nav-link text-white <%= uriAtual.contains("perfil") ? "active bg-primary" : "" %>">
 			        <i class="fa-regular fa-id-badge me-2"></i>Meu Perfil
+			    </a>
+			</li>
+			<li class="nav-item mb-2">
+			    <a href="${pageContext.request.contextPath}/admin/chamados" 
+			       class="nav-link text-white <%= uriAtual.contains("admin/chamados") ? "active bg-danger" : "" %>">
+			        <i class="fa-solid fa-list-check me-2"></i>Fila de Chamados
 			    </a>
 			</li>
         <% } %>

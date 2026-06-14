@@ -39,17 +39,17 @@
                         <a href="cadastro.jsp" class="btn btn-outline-light btn-lg px-4">Criar Conta</a>
                         
                     <% } else if ("CLIENTE".equals(papelIndex)) { %>
-                        <a href="cliente/dashboard.jsp" class="btn btn-primary btn-lg px-4 fw-bold">
+                        <a href="cliente/dashboard" class="btn btn-primary btn-lg px-4 fw-bold">
                             <i class="fa-solid fa-gauge-high me-2"></i>Ir para Meu Painel
                         </a>
                         
                     <% } else if ("SUPORTE".equals(papelIndex)) { %>
-                        <a href="suporte/fila-chamados.jsp" class="btn btn-warning btn-lg px-4 fw-bold text-dark">
+                        <a href="suporte/dashboard" class="btn btn-warning btn-lg px-4 fw-bold text-dark">
                             <i class="fa-solid fa-list-check me-2"></i>Acessar Fila de Atendimento
                         </a>
                         
                     <% } else if ("ADMIN".equals(papelIndex)) { %>
-                        <a href="admin/dashboard-global.jsp" class="btn btn-danger btn-lg px-4 fw-bold">
+                        <a href="admin/dashboard" class="btn btn-danger btn-lg px-4 fw-bold">
                             <i class="fa-solid fa-sliders me-2"></i>Painel do Administrador
                         </a>
                     <% } %>

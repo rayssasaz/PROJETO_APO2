@@ -135,11 +135,11 @@ public class AuthServlet extends HttpServlet {
 	                
 	                // REDIRECIONAMENTO POR PAPEL:
 	                if (models.NivelAcesso.ADMIN.equals(usuario.getAcesso())) {
-	                    response.sendRedirect(request.getContextPath() + "/admin/dashboard-global.jsp");
+	                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
 	                } else if (models.NivelAcesso.SUPORTE.equals(usuario.getAcesso())) {
-	                    response.sendRedirect(request.getContextPath() + "/suporte/fila-chamados.jsp");
+	                    response.sendRedirect(request.getContextPath() + "/suporte/dashboard");
 	                } else {
-	                    response.sendRedirect(request.getContextPath() + "/cliente/dashboard.jsp");
+	                    response.sendRedirect(request.getContextPath() + "/cliente/dashboard");
 	                }
 	            } else {
 	                request.setAttribute("erro", "E-mail ou senha incorretos.");
